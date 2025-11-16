@@ -15,43 +15,65 @@
       <a href="#contatti">Contatti</a>
     </nav>
   </header>
+ <form method="post" id="contact-form">
+    <h2>Contact us</h2>
+    <?php
+      $errorMessage = ''; // Define $errorMessage
+      echo(!empty($errorMessage) ? $errorMessage : '');
+    ?>
+    <p>
+      <label>First Name:</label>
+      <input name="name" type="text"/>
+    </p>
+    <p>
+      <label>Email Address:</label>
+      <input style="cursor: pointer;" name="email" type="text"/>
+    </p>
+    <p>
+      <label>Message:</label>
+      <textarea name="message"></textarea>
+    </p>
+    <p>
+      <input type="submit" value="Send"/>
+    </p>
+  </form>
 
-  <!-- SEZIONE SERVIZI -->
-  <main>
-    <section id="servizi">
-      <h2>I miei servizi</h2>
-      <div class="card">
-        <h3>Sito Web Base</h3>
-        <p>Una pagina semplice e professionale per presentarti online.</p>
-      </div>
-      <div class="card">
-        <h3>Blog Base</h3>
-        <p>Uno spazio dove pubblicare articoli e condividere idee.</p>
-      </div>
-    </section>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/validate.js/0.13.1/validate.min.js"></script>
+  <script>
+    const constraints = {
+      name: {
+        presence: { allowEmpty: false }
+      },
+      email: {
+        presence: { allowEmpty: false },
+        email: true
+      },
+      message: {
+        presence: { allowEmpty: false }
+      }
+    };
 
-    <!-- SEZIONE CONTATTI -->
-    <section id="contatti">
-      <h2>Contattami</h2>
-      <form action="#" method="post">
-        <label for="nome">Nome:</label>
-        <input type="text" id="nome" name="nome" required>
+    const form = document.getElementById('contact-form');
+    form.addEventListener('submit', function(event) {
+      const formValues = {
+        name: form.elements.name.value,
+        email: form.elements.email.value,
+        message: form.elements.message.value
+      };
 
-        <label for="email">andreaxy@live.it:</label>
-        <input type="email" id="email" name="email" required>
+      const errors = validate(formValues, constraints);
+      if (errors) {
+        event.preventDefault();
+        const errorMessage = Object.values(errors)
+          .map(function(fieldValues) {
+            return fieldValues.join(', ');
+          })
+          .join("\n");
 
-        <label for="messaggio">Messaggio:</label>
-        <textarea id="messaggio" name="messaggio" rows="5" required></textarea>
-
-        <button type="submit">Invia</button>
-      </form>
-    </section>
-  </main>
-
-  <!-- FOOTER -->
-  <footer>
-    <p>&copy; 2025 - Andrea Web Solutions</p>
-  </footer>
+        alert(errorMessage);
+      }
+    }, false);
+  </script>
 </body>
-
 </html>
+ 
